@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    ports:
+      - 5000:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=123
+      - MARIADB_DATABASE=nest
+    networks:
+      - nest_rest
+
+networks:
+  nest_rest:
+    
+
+    

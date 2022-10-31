@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Institution {
+  id Int @id @default(autoincrement())
+  form Form?
+  participants Participant[]
+
+  name String @db.VarChar(255) @unique
+  email String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+}
+
+model Form {
+  id Int @id @default(autoincrement())
+  institution Institution @relation(fields: [institution_id], references: [id])
+  institution_id Int @unique
+  questions Question[]
+
+  duration Int
+  active_date DateTime
+}
+
+model Question {
+  id Int @id @default(autoincrement())
+  form Form @relation(fields: [form_id], references: [id])
+  form_id Int
+  choices Choice[]
+
+  score Int
+  description String @db.VarChar(500)
+  answer_code String @db.Char(1)
+}
+
+model Choice {
+  id Int @id @default(autoincrement())
+  question Question @relation(fields: [question_id], references: [id])
+  question_id Int
+  answers Answer[]
+
+  description String @db.VarChar(500)
+  code String @db.Char(1)
+}
+
+model Participant{
+  id Int @id @default(autoincrement())
+  institution Institution @relation(fields: [institution_id], references: [id])
+  institution_id Int
+  answers Answer[]
+
+  name String @db.VarChar(255)
+  NIP Int
+  password String @db.VarChar(255)
+  score Int?
+}
+
+model Answer{
+  id Int @id @default(autoincrement())
+  participant Participant @relation(fields: [participant_id],references: [id])
+  participant_id Int
+  choice Choice @relation(fields: [choice_id], references: [id])
+  choice_id Int
+}
+
