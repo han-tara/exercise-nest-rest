@@ -26,8 +26,9 @@ model Form {
   institution_id Int @unique
   questions Question[]
 
-  duration Int
-  active_date DateTime
+  duration Int?
+  active_date DateTime?
+  status String? @db.VarChar(20)
 }
 
 model Question {
@@ -58,7 +59,6 @@ model Participant{
   answers Answer[]
 
   name String @db.VarChar(255)
-  NIP Int
   password String @db.VarChar(255)
   score Int?
 }

@@ -1,2 +1,20 @@
-#1 Institution registration
-    enter name, 
+Objective of the system
+
+Participan
+	login with userID and password (created from institution)
+	waiting room
+		if timer still count wait
+		if timer >= schedule === join
+		if user late, cannot join
+	after done, exit and cannot login again (Participant already finished the test)
+
+Institution
+	register with name, email, and password
+	create questions
+	add participants
+	execute test (date and ok)
+	
+Post-test
+	read all scores from database
+
+	
