@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
 
@@ -6,7 +6,8 @@ import { PrismaService } from './prisma/prisma.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
   @Get()
-  get() {
-    return 'hello'
+  @Render('index')
+  root() {
+    return undefined
   }
 }

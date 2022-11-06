@@ -7,6 +7,7 @@ import * as argon from 'argon2'
 import { FormStatus } from 'src/enum';
 import {JwtService} from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +44,7 @@ export class AuthService {
         return this.signToken(institution.id)
 
     }
-    async signin_institution({email, password}: SigninInstDto){
+    async signin_institution({email, password}: SigninInstDto, response: Response){
         //check email
         const institution = await this.prisma.institution.findUnique({
             where: {
@@ -55,13 +56,19 @@ export class AuthService {
             throw new ForbiddenException('Email/Password is wrong')
         }
         //check if password same
-        const legit = await argon.verify(institution.password,password)
-        //if not return exception
-        if (!legit) {
-            throw new ForbiddenException('Email/Password is wrong')
+        try {
+            const legit = await argon.verify(institution.password, password)
+            if (!legit) {
+                throw new ForbiddenException('Email/Password is wrong')
+            }
+            //return token
+            response.cookie('token',this.signToken(institution.id))
+            return 'sign in!'
+            // return this.signToken(institution.id)
+        } catch(err) {
+            console.log(err)
+            throw new ForbiddenException('Email/Password authenthication failed')
         }
-        //return token
-        return this.signToken(institution.id)
     }
     async signin_participant({id,password}: SigninPartDto) {
         //check id

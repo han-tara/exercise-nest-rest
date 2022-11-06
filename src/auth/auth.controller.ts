@@ -1,5 +1,6 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignupDto, SigninInstDto, SigninPartDto } from './dto';
 
@@ -16,8 +17,8 @@ export class AuthController {
     //signin logic
     @HttpCode(HttpStatus.OK)
     @Post('signin/institution')
-    signinInstitution(@Body() dto: SigninInstDto) {
-        return this.service.signin_institution(dto)
+    signinInstitution(@Body() dto: SigninInstDto, @Res({passthrough: true}) response: Response) {
+        return this.service.signin_institution(dto,response)
     }
     @HttpCode(HttpStatus.OK)
     @Post('signin/participant')
